@@ -109,7 +109,10 @@ npm run validate
 
 MIT — see [LICENSE](LICENSE).
 
-## Related
+## Related repos
 
-This is the **community template** (no personal hosts or org data).  
-For a full production example with runbooks and internal fleet registry, see the private ops pattern in your own fork after `npm run init`.
+| Repo | Purpose |
+|------|---------|
+| [tailscale-devbox](https://github.com/SoulWayy/tailscale-devbox) | This template — SSH Devbox fleet |
+| [tailscale-sovereign-recipe](https://github.com/OnlineChefGroep/tailscale-sovereign-recipe) | Poke/MCP OAuth recipe (public recipe task list) |
+| [tailscale-ssh-fleet](https://github.com/SoulWayy/tailscale-ssh-fleet) | Private ops example (not for community fork) |
