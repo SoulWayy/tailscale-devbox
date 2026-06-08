@@ -1,0 +1,11 @@
+# Copy to registry.yaml after `npm run init`, or edit manually.
+primary:
+  host: devbox-1
+  user: deploy
+  port: 22222
+  tier: primary
+backup:
+  host: devbox-2
+  user: deploy
+  port: 22222
+  tier: backup

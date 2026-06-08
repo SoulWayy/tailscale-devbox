@@ -1,0 +1,14 @@
+# Tailscale Devbox Fleet — append to ~/.ssh/config
+# Run `npm run init` to generate host-specific version in generated/
+
+Host devbox-1 devbox-1.example.ts.net
+    HostName devbox-1.example.ts.net
+    User deploy
+    Port 22222
+    IdentityFile ~/.ssh/id_ed25519
+
+Host devbox-2 devbox-2.example.ts.net
+    HostName devbox-2.example.ts.net
+    User deploy
+    Port 22222
+    IdentityFile ~/.ssh/id_ed25519

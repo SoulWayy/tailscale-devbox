@@ -1,0 +1,30 @@
+{
+  "name": "tailscale-devbox",
+  "version": "1.0.0",
+  "description": "Tailscale SSH Devbox fleet template — Brain dispatches work to tailnet Linux hosts",
+  "type": "module",
+  "license": "MIT",
+  "bin": {
+    "tailscale-devbox-init": "./scripts/init.mjs"
+  },
+  "scripts": {
+    "init": "node scripts/init.mjs",
+    "init:quick": "node scripts/init.mjs --non-interactive",
+    "validate": "node scripts/validate.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "keywords": [
+    "tailscale",
+    "ssh",
+    "devbox",
+    "agent",
+    "ai",
+    "homelab"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SoulWayy/tailscale-devbox.git"
+  }
+}

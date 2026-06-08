@@ -1,0 +1,23 @@
+{
+  // Paste into Tailscale admin → Access controls
+  // Replace YOUR_GITHUB_LOGIN with your Tailscale identity (e.g. alice@github)
+  "ssh": [
+    {
+      "action": "accept",
+      "src": ["autogroup:member"],
+      "dst": ["autogroup:member"],
+      "users": ["autogroup:nonroot", "root"]
+    }
+  ],
+  "tagOwners": {
+    "tag:ssh-fleet": ["YOUR_GITHUB_LOGIN@github"]
+  },
+  "sshTagged": [
+    {
+      "action": "accept",
+      "src": ["autogroup:member"],
+      "dst": ["tag:ssh-fleet"],
+      "users": ["autogroup:nonroot", "root"]
+    }
+  ]
+}
