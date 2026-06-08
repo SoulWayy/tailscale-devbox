@@ -7,7 +7,7 @@ import { join, dirname } from 'node:path';
 import { randomUUID } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 import { spawn } from 'node:child_process';
-import { loadConfig, sshTarget, sshArgs } from '../lib/config.mjs';
+import { loadConfig, sshTarget, sshTransport, devboxHosts } from '../lib/config.mjs';
 import { runSsh } from '../lib/ssh.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
@@ -21,13 +21,13 @@ function getArg(name, fallback = '') {
 async function runRemoteSession(target, subcmd, taskId) {
   const script = await readFile(join(ROOT, 'scripts/session-remote.sh'), 'utf8');
   return new Promise((resolve, reject) => {
-    const child = spawn('ssh', sshArgs(target, 'bash -s'), { stdio: ['pipe', 'pipe', 'pipe'] });
+    const { bin, args } = sshTransport(target, `bash -s ${subcmd} ${taskId}`);
+    const child = spawn(bin, args, { stdio: ['pipe', 'pipe', 'pipe'] });
     let out = '';
     let err = '';
     child.stdout.on('data', (d) => { out += d; });
     child.stderr.on('data', (d) => { err += d; });
     child.stdin.write(script);
-    child.stdin.write(`\n${subcmd} ${taskId}\n`);
     child.stdin.end();
     child.on('close', (code) => {
       if (code !== 0) reject(new Error(err || `remote session ${subcmd} failed (${code})`));
@@ -42,6 +42,7 @@ const step = getArg('--step', 'discovery');
 const objective = getArg('--objective', '');
 const taskId = getArg('--task-id', `task-${randomUUID().slice(0, 8)}`);
 const devbox = getArg('--devbox', '');
+const noFailover = args.includes('--no-failover');
 const iteration = Number(getArg('--iteration', '1'));
 
 if (!objective) {
@@ -50,21 +51,36 @@ if (!objective) {
 }
 
 const config = await loadConfig(ROOT);
-const target = sshTarget(config, devbox || config.primary_host);
+const hostQueue = noFailover || devbox
+  ? devboxHosts(config, devbox || config.primary_host)
+  : devboxHosts(config, '');
 
-console.log(`==> Dispatch to ${target.fqdn}`);
-console.log(`    specialist: ${specialist} | step: ${step} | task_id: ${taskId}`);
-
+let target;
 let workspace;
 let offline = false;
-try {
-  workspace = await runRemoteSession(target, 'create', taskId);
-} catch (e) {
-  offline = true;
-  workspace = join(ROOT, '.devbox-local', taskId);
-  await mkdir(workspace, { recursive: true });
-  console.warn('WARN: SSH unavailable — local workspace:', workspace);
-  console.warn('       ', e.message);
+let failedOver = false;
+
+for (let i = 0; i < hostQueue.length; i++) {
+  target = sshTarget(config, hostQueue[i]);
+  if (i === 0) {
+    console.log(`==> Dispatch to ${target.fqdn}`);
+  } else {
+    failedOver = true;
+    console.log(`==> Failover: trying ${target.fqdn}`);
+  }
+  console.log(`    specialist: ${specialist} | step: ${step} | task_id: ${taskId}`);
+  try {
+    workspace = await runRemoteSession(target, 'create', taskId);
+    break;
+  } catch (e) {
+    console.warn(`WARN: ${target.fqdn} unavailable: ${e.message}`);
+    if (i === hostQueue.length - 1) {
+      offline = true;
+      workspace = join(ROOT, '.devbox-local', taskId);
+      await mkdir(workspace, { recursive: true });
+      console.warn('WARN: all Devbox hosts failed — local workspace:', workspace);
+    }
+  }
 }
 
 const task = {
@@ -74,6 +90,7 @@ const task = {
   objective,
   devbox: target.host,
   workspace,
+  failed_over: failedOver,
   iteration,
   max_iterations: 3,
   context: {},
