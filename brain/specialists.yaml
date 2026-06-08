@@ -1,0 +1,36 @@
+# Specialist registry — Brain routes tasks before spawning subagents on Devbox.
+version: "1.0"
+
+loop_steps:
+  - discovery
+  - plan
+  - execute
+  - verify
+  - eval
+
+defaults:
+  max_iterations: 3
+  workspace_root: "~/.devbox/workspaces"
+  session_backend: tmux
+
+specialists:
+  infra-ssh:
+    name: Infrastructure / SSH
+    description: Tailscale, SSH bootstrap, ACL, sessions, host health
+    prompt: subagents/infra-ssh/PROMPT.md
+    steps: [discovery, plan, execute, verify]
+    eval_required: true
+
+  code-repo:
+    name: Code / Repository
+    description: Git, builds, tests, patches in isolated workspace
+    prompt: subagents/code-repo/PROMPT.md
+    steps: [discovery, plan, execute, verify]
+    eval_required: true
+
+  research-verify:
+    name: Research / Verify
+    description: Read-only analysis, validation gates, ship/no-ship eval
+    prompt: subagents/research-verify/PROMPT.md
+    steps: [discovery, verify, eval]
+    eval_required: true

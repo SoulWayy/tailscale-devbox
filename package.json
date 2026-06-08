@@ -10,7 +10,11 @@
   "scripts": {
     "init": "node scripts/init.mjs",
     "init:quick": "node scripts/init.mjs --non-interactive",
-    "validate": "node scripts/validate.mjs"
+    "validate": "node scripts/validate.mjs",
+    "dispatch": "node scripts/dispatch.mjs",
+    "subagent": "node scripts/subagent.mjs",
+    "session": "node scripts/session.mjs",
+    "eval": "node scripts/eval.mjs"
   },
   "engines": {
     "node": ">=20"

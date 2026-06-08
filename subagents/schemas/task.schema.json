@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SoulWayy/tailscale-devbox/task.schema.json",
+  "title": "DevboxTask",
+  "type": "object",
+  "required": ["task_id", "specialist", "step", "objective", "iteration", "devbox"],
+  "properties": {
+    "task_id": { "type": "string", "pattern": "^[a-zA-Z0-9_-]+$" },
+    "specialist": { "enum": ["infra-ssh", "code-repo", "research-verify"] },
+    "step": { "enum": ["discovery", "plan", "execute", "verify", "eval"] },
+    "objective": { "type": "string", "minLength": 1 },
+    "devbox": { "type": "string" },
+    "workspace": { "type": "string" },
+    "iteration": { "type": "integer", "minimum": 1, "maximum": 3 },
+    "max_iterations": { "type": "integer", "minimum": 1, "maximum": 5, "default": 3 },
+    "context": { "type": "object", "additionalProperties": true },
+    "created_at": { "type": "string", "format": "date-time" }
+  },
+  "additionalProperties": false
+}

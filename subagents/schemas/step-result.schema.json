@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SoulWayy/tailscale-devbox/step-result.schema.json",
+  "title": "StepResult",
+  "type": "object",
+  "required": ["task_id", "specialist", "step", "exit_code", "verdict"],
+  "properties": {
+    "task_id": { "type": "string" },
+    "specialist": { "type": "string" },
+    "step": { "type": "string" },
+    "exit_code": { "type": "integer" },
+    "stdout": { "type": "string" },
+    "stderr": { "type": "string" },
+    "artifacts": { "type": "array", "items": { "type": "string" } },
+    "verdict": { "enum": ["pass", "retry", "abort", "handoff", "pending"] },
+    "eval_notes": { "type": "string" },
+    "next_step": { "enum": ["discovery", "plan", "execute", "verify", "eval", "ship", null] },
+    "finished_at": { "type": "string", "format": "date-time" }
+  },
+  "additionalProperties": false
+}

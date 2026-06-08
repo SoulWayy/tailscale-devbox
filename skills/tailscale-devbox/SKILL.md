@@ -32,11 +32,22 @@ cd tailscale-devbox
 npm run init
 ```
 
+## Subagent development
+
+```bash
+npm run dispatch -- --specialist code-repo --objective "run tests"
+npm run subagent -- --task-id <id> --step discovery
+npm run eval -- --task-id <id>
+```
+
+Protocol: `brain/protocol.md` · Specialists: `brain/specialists.yaml` · Runbook: `runbooks/subagent-development.md`
+
 ## Runbooks
 
 | Runbook | Path |
 |---------|------|
 | Index | `runbooks/README.md` |
+| Subagents | `runbooks/subagent-development.md` |
 | Bootstrap | `runbooks/bootstrap-devbox-node.md` |
 | Failover | `runbooks/failover-devbox.md` |
 | Dispatch | `runbooks/brain-dispatch.md` |

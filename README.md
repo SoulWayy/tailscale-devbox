@@ -55,13 +55,29 @@ pwsh skills/install-skills.ps1   # Windows
 bash skills/install-skills.sh    # Linux/macOS
 ```
 
+## Subagent development
+
+Brain → specialist → subagent closed loop on Devbox:
+
+```bash
+npm run dispatch -- --specialist code-repo --objective "run tests"
+npm run subagent -- --task-id task-abc12345
+npm run eval -- --task-id task-abc12345
+```
+
+Three specialists: `infra-ssh`, `code-repo`, `research-verify`. See `runbooks/subagent-development.md`.
+
 ## What's included
 
 | Path | Purpose |
 |------|---------|
 | `scripts/init.mjs` | JS fleet config generator |
+| `scripts/dispatch.mjs` | Brain → Devbox task dispatch |
+| `scripts/subagent.mjs` | Subagent spawn prompt builder |
+| `brain/` | Protocol + specialist registry |
+| `subagents/` | Specialist PROMPT.md packs |
 | `scripts/bootstrap-ssh-node.sh` | Tailnet-only OpenSSH + Tailscale SSH |
-| `runbooks/` | Bootstrap, failover, dispatch, ACL |
+| `runbooks/` | Bootstrap, failover, dispatch, subagents, ACL |
 | `skills/tailscale-devbox/` | Grok agent skill |
 | `templates/` | ACL + SSH config examples |
 

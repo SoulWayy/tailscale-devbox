@@ -9,11 +9,20 @@ const required = [
   'package.json',
   'LICENSE',
   'README.md',
+  'brain/protocol.md',
+  'brain/specialists.yaml',
   'scripts/bootstrap-ssh-node.sh',
   'scripts/init.mjs',
+  'scripts/dispatch.mjs',
+  'scripts/subagent.mjs',
+  'scripts/session.mjs',
+  'scripts/eval.mjs',
+  'scripts/session-remote.sh',
+  'subagents/code-repo/PROMPT.md',
   'skills/tailscale-devbox/SKILL.md',
   'templates/acl-ssh-fleet.jsonc',
   'runbooks/README.md',
+  'runbooks/subagent-development.md',
 ];
 
 let ok = true;
