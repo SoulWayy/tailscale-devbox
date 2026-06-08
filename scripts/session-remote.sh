@@ -2,6 +2,14 @@
 # Runs ON the Devbox host — workspace + tmux session isolation per task_id.
 set -euo pipefail
 
+# Host-side secrets (fish loads via secrets.fish; bash -s needs explicit source)
+if [[ -f "${HOME}/.openclaude/.env" ]]; then
+  set -a
+  # shellcheck disable=SC1091
+  . "${HOME}/.openclaude/.env"
+  set +a
+fi
+
 WORK_ROOT="${DEVBOX_WORK_ROOT:-${HOME}/.devbox/workspaces}"
 SESSION_PREFIX="${DEVBOX_SESSION_PREFIX:-devbox}"
 
